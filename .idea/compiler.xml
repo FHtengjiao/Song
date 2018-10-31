@@ -9,6 +9,7 @@
         <module name="Common" />
         <module name="Site" />
         <module name="song-common" />
+        <module name="song-site" />
       </profile>
     </annotationProcessing>
   </component>
