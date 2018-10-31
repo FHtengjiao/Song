@@ -41,16 +41,16 @@ public class SongListServlet extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if ("/Song/list.do".equals(request.getServletPath())) {
             Map<SongList,List<Song>> map = new LinkedHashMap<>();
-            List<String> songNames = null;
             List<SongList> songLists = songListService.getSongListsByCreator((String)request.getSession().getAttribute("username"));
             for (SongList songList:
                  songLists) {
                 if (songList.getSongName() != null) {
-                    songNames = Arrays.asList(songList.getSongName().split(","));
+                    List<String> songNames = Arrays.asList(songList.getSongName().split(","));
+                    map.put(songList, songService.getSongsByNames(songNames));
                 } else {
-                    songNames = null;
+                    map.put(songList, null);
                 }
-                map.put(songList, songService.getSongsByNames(songNames));
+
             }
             request.setAttribute("songMap", map);
             request.getRequestDispatcher("/WEB-INF/views/biz/songlist.jsp").forward(request, response);
@@ -100,7 +100,28 @@ public class SongListServlet extends HttpServlet {
         } else if ("/Song/addSongsToListPrompt.do".equals(request.getServletPath())) {
             String listId = request.getParameter("listId");
             request.setAttribute("listId", listId);
+            List<Song> allSongs = songService.getSongs();
+            request.setAttribute("allSongs", allSongs);
             request.getRequestDispatcher("/WEB-INF/views/biz/addSongToList.jsp").forward(request, response);
+        } else if ("/Song/addSongsToList.do".equals(request.getServletPath())) {
+            String listId = request.getParameter("listId");
+            SongList songList = songListService.getSongListsById(Long.parseLong(listId));
+            StringBuilder sb = new StringBuilder();
+            if (songList.getSongName() != null) {
+                sb.append(songList.getSongName());
+            }
+            String[] selectSongs = request.getParameterValues("selectSongs");
+            for (String song : selectSongs) {
+                if (sb.indexOf(song) == -1) {
+                    if (sb.length() != 0) {
+                        sb.append(",").append(song);
+                    } else {
+                        sb.append(song);
+                    }
+                }
+            }
+            songListService.updateSongNameInList(sb.toString(), songList.getId());
+            request.getRequestDispatcher("/Song/list.do").forward(request, response);
         }
     }
 }

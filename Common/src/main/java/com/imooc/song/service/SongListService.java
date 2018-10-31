@@ -38,11 +38,38 @@ public class SongListService {
         return songLists;
     }
 
+    public SongList getSongListsById(Long id) {
+        SqlSession session = MyBatisUtils.getSqlSession();
+        SongList songList = null;
+        try {
+            SongListMapper mapper = session.getMapper(SongListMapper.class);
+            songList = mapper.getSongListsById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return songList;
+    }
+
     public void addSongList(SongList songList) {
         SqlSession session = MyBatisUtils.getSqlSession();
         try {
             SongListMapper mapper = session.getMapper(SongListMapper.class);
             mapper.addSongList(songList);
+            session.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    public void updateSongNameInList(String songNames, Long id) {
+        SqlSession session = MyBatisUtils.getSqlSession();
+        try {
+            SongListMapper mapper = session.getMapper(SongListMapper.class);
+            mapper.updateSongNameInList(songNames, id);
             session.commit();
         } catch (Exception e) {
             e.printStackTrace();
