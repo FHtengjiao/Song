@@ -42,6 +42,7 @@
                 <th>作词</th>
                 <th>语言</th>
                 <th>发行日期</th>
+                <th>操作</th>
             </tr>
             <c:forEach items="${songs}" var="song">
                 <tr>
@@ -52,6 +53,12 @@
                     <td>${song.writer}</td>
                     <td>${song.language}</td>
                     <td><fmt:formatDate type="date" value="${song.issueDate}" pattern="yyyy-MM-dd"/></td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <a href="${pageContext.request.contextPath}/Song/editSong.do" class="btn btn-primary btn-sm" role="button">编辑</a>
+                            <a href="${pageContext.request.contextPath}/Song/deleteSong.do" class="btn btn-primary btn-sm" role="button">删除</a>
+                        </div>
+                    </td>
                 </tr>
             </c:forEach>
         </table>

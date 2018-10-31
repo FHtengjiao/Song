@@ -54,6 +54,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                     ${map.key.description}
+                        <a href="${pageContext.request.contextPath}/Song/editSongListPrompt.do?listId=${map.key.id}" class="btn btn-primary btn-sm pull-right" role="button">编辑此歌单</a>
             </div>
         </div>
         <table class="table table-striped table-bordered table-hover">
@@ -65,6 +66,7 @@
                 <th>作词</th>
                 <th>语言</th>
                 <th>发行日期</th>
+                <th>操作</th>
             </tr>
             <c:forEach items="${map.value}" var="song">
             <tr>
@@ -75,10 +77,11 @@
                 <td>${song.writer}</td>
                 <td>${song.language}</td>
                 <td><fmt:formatDate type="date" value="${song.issueDate}" pattern="yyyy-MM-dd"/></td>
+                <td><a href="${pageContext.request.contextPath}/Song/removeSongFromList.do?songId=${song.id}" class="btn btn-primary btn-sm" role="button">移出歌单</a></td>
             </tr>
             </c:forEach>
             <tr>
-                <td colspan="7"><a href="${pageContext.request.contextPath}/Song/addSongsToListPrompt.do?listId=${map.key.id}&&listName=${map.key.name}" class="btn btn-primary btn-lg center-block" role="button">添加歌曲</a></td>
+                <td colspan="8"><a href="${pageContext.request.contextPath}/Song/addSongsToListPrompt.do?listId=${map.key.id}" class="btn btn-primary btn-lg center-block" role="button">添加歌曲</a></td>
             </tr>
         </table>
     </div>
