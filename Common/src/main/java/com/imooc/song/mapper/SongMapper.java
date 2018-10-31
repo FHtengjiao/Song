@@ -1,6 +1,7 @@
 package com.imooc.song.mapper;
 
 import com.imooc.song.entity.Song;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -19,4 +20,8 @@ public interface SongMapper {
             + "</foreach>"
             + "</script>")
     List<Song> getSongsByNames(@Param("names") List<String> names);
+
+    @Insert("INSERT song(name,singer,category,writer,language,issuedate) " +
+            "VALUES(#{song.name}, #{song.singer}, #{song.category}, #{song.writer}, #{song.language}, #{song.issueDate})")
+    void addSong(@Param("song") Song song);
 }

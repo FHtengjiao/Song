@@ -37,4 +37,17 @@ public class SongService {
         }
         return songs;
     }
+
+    public void addSong(Song song) {
+        SqlSession session = MyBatisUtils.getSqlSession();
+        try {
+            SongMapper mapper = session.getMapper(SongMapper.class);
+            mapper.addSong(song);
+            session.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
 }

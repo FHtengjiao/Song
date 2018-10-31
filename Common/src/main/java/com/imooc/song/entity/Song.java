@@ -1,5 +1,7 @@
 package com.imooc.song.entity;
 
+import java.util.Date;
+
 public class Song {
     private Long id;
     private String name;
@@ -7,7 +9,20 @@ public class Song {
     private String category;
     private String writer;
     private String language;
-    private String issudate;
+    private Date issueDate;
+
+    public Song() {
+
+    }
+
+    public Song(String name, String singer, String category, String writer, String language, Date issueDate) {
+        this.name = name;
+        this.singer = singer;
+        this.category = category;
+        this.writer = writer;
+        this.language = language;
+        this.issueDate = issueDate;
+    }
 
     public Long getId() {
         return id;
@@ -57,12 +72,12 @@ public class Song {
         this.language = language;
     }
 
-    public String getIssudate() {
-        return issudate;
+    public Date getIssueDate() {
+        return issueDate;
     }
 
-    public void setIssudate(String issudate) {
-        this.issudate = issudate;
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
     }
 
     @Override
@@ -74,7 +89,7 @@ public class Song {
                 ", category='" + category + '\'' +
                 ", writer='" + writer + '\'' +
                 ", language='" + language + '\'' +
-                ", issudate='" + issudate + '\'' +
+                ", issueDate='" + issueDate + '\'' +
                 '}';
     }
 }

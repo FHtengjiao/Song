@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <title>歌单列表</title>
@@ -15,8 +16,19 @@
     <script src="../../../lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script>
         $().ready(function () {
-            $("#songList li:first").addClass("active");
-            $
+            $("#songList li[id='tag_0']").addClass("active");
+            $(".row[id^='list_']").hide();
+            $(".row[id='list_0']").show();
+
+            $("#songList li[id^='tag_']").click(function () {
+                    let id = $(this).attr("id").split("_")[1];
+                    $("#songList li[id^='tag_']").removeClass("active");
+                    $(this).addClass("active");
+                    $(".row[id^='list_']").hide();
+                    let list_id = "list_" + id;
+                    $(".row[id=" + list_id + "]").show();
+                }
+            );
         });
     </script>
 </head>
@@ -24,19 +36,21 @@
 <div class="container">
     <div class="row">
         <div class="page-header">
-            <h1>歌单列表<small>${sessionScope.username}的歌单</small></h1>
+            <h1>歌单列表<small>${sessionScope.username}的歌单</small>
+                <a href="${pageContext.request.contextPath}/Song/allSongs.do" class="btn btn-primary btn-lg pull-right" role="button">前往曲库</a>
+            </h1>
         </div>
     </div>
     <div class="row">
         <ul class="nav nav-tabs" id="songList">
-            <c:forEach items="${songMap}" var="map">
-            <li id = "${map.key.id}" role="presentation"><a href="#">${map.key.name}</a></li>
+            <c:forEach items="${songMap}" var="map" varStatus="status">
+            <li id="tag_${status.index}" role="presentation"><a href="javascript:void(0)">${map.key.name}</a></li>
             </c:forEach>
-            <li role="presentation"><a href="#">+新增歌单+</a></li>
+            <li role="presentation"><a href="${pageContext.request.contextPath}/Song/songListAddPrompt.do">+新增歌单+</a></li>
         </ul>
     </div>
-    <c:forEach items="${songMap}" var="map">
-    <div class="row" id="${map.key.id}">
+    <c:forEach items="${songMap}" var="map" varStatus="status">
+    <div class="row" id="list_${status.index}">
         <div class="panel panel-default">
             <div class="panel-body">
                     ${map.key.description}
@@ -60,9 +74,12 @@
                 <td>${song.category}</td>
                 <td>${song.writer}</td>
                 <td>${song.language}</td>
-                <td>${song.issudate}</td>
+                <td><fmt:formatDate type="date" value="${song.issueDate}" pattern="yyyy-MM-dd"/></td>
             </tr>
             </c:forEach>
+            <tr>
+                <td colspan="7"><a href="${pageContext.request.contextPath}/Song/addSongsToListPrompt.do?listId=${map.key.id}&&listName=${map.key.name}" class="btn btn-primary btn-lg center-block" role="button">添加歌曲</a></td>
+            </tr>
         </table>
     </div>
     </c:forEach>

@@ -7,6 +7,15 @@ public class SongList {
     private String creator;
     private String description;
 
+    public SongList() {
+    }
+
+    public SongList(String name, String creator, String description) {
+        this.name = name;
+        this.creator = creator;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }

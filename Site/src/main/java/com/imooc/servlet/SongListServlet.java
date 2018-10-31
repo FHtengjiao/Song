@@ -1,5 +1,6 @@
 package com.imooc.servlet;
 
+import com.imooc.song.common.StringUtils;
 import com.imooc.song.entity.Song;
 import com.imooc.song.entity.SongList;
 import com.imooc.song.service.SongListService;
@@ -11,12 +12,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-@WebServlet(name = "SongListServlet", urlPatterns = "/Song/list.do")
+@WebServlet(name = "SongListServlet", urlPatterns = {
+        "/Song/list.do",
+        "/Song/allSongs.do",
+        "/Song/songAddPrompt.do",
+        "/Song/addSong.do",
+        "/Song/songListAddPrompt.do",
+        "/Song/songListAdd.do",
+        "/Song/addSongsToListPrompt.do",
+        "/Song/addSongsToList.do"
+})
 public class SongListServlet extends HttpServlet {
 
     private SongListService songListService;
@@ -32,16 +40,67 @@ public class SongListServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if ("/Song/list.do".equals(request.getServletPath())) {
-            Map<SongList,List<Song>> map = new HashMap<>();
+            Map<SongList,List<Song>> map = new LinkedHashMap<>();
+            List<String> songNames = null;
             List<SongList> songLists = songListService.getSongListsByCreator((String)request.getSession().getAttribute("username"));
             for (SongList songList:
                  songLists) {
-                List<String> songNames = Arrays.asList(songList.getSongName().split(","));
+                if (songList.getSongName() != null) {
+                    songNames = Arrays.asList(songList.getSongName().split(","));
+                } else {
+                    songNames = null;
+                }
                 map.put(songList, songService.getSongsByNames(songNames));
             }
             request.setAttribute("songMap", map);
-
             request.getRequestDispatcher("/WEB-INF/views/biz/songlist.jsp").forward(request, response);
+        } else if ("/Song/allSongs.do".equals(request.getServletPath())) {
+            List<Song> songs = songService.getSongs();
+            request.setAttribute("songs", songs);
+            request.getRequestDispatcher("/WEB-INF/views/biz/songs.jsp").forward(request, response);
+        } else if ("/Song/songAddPrompt.do".equals(request.getServletPath())) {
+            request.getRequestDispatcher("/WEB-INF/views/biz/addSong.jsp").forward(request, response);
+        } else if ("/Song/addSong.do".equals(request.getServletPath())) {
+            String songName = request.getParameter("songname");
+            String singer = request.getParameter("singer");
+            String category = request.getParameter("category");
+            String writer = request.getParameter("writer");
+            String language = request.getParameter("language");
+            String issueDate = request.getParameter("issuedate");
+
+            if (StringUtils.isNotEmptyString(songName) && StringUtils.isNotEmptyString(singer)
+                    && StringUtils.isNotEmptyString(category) && StringUtils.isNotEmptyString(writer)
+                    && StringUtils.isNotEmptyString(language) && StringUtils.isNotEmptyString(issueDate)) {
+                try {
+                    SimpleDateFormat sdf =  new SimpleDateFormat("yyyyMMdd");
+                    Date issueTime = sdf.parse(issueDate);
+                    Song song = new Song(songName, singer, category, writer, language, issueTime);
+                    songService.addSong(song);
+                    request.getRequestDispatcher("/Song/allSongs.do").forward(request, response);
+                } catch (Exception e) {
+                    request.getRequestDispatcher("/Song/songAddPrompt.do").forward(request, response);
+                }
+            }
+            else{
+                request.getRequestDispatcher("/Song/songAddPrompt.do").forward(request, response);
+            }
+        } else if ("/Song/songListAddPrompt.do".equals(request.getServletPath())) {
+            request.getRequestDispatcher("/WEB-INF/views/biz/addSongList.jsp").forward(request, response);
+        } else if ("/Song/songListAdd.do".equals(request.getServletPath())) {
+            String name = request.getParameter("name");
+            String description = request.getParameter("description");
+
+            if (StringUtils.isNotEmptyString(name) && StringUtils.isNotEmptyString(description)) {
+                    SongList songList = new SongList(name, (String)request.getSession().getAttribute("username"), description);
+                    songListService.addSongList(songList);
+                    request.getRequestDispatcher("/Song/list.do").forward(request, response);
+            } else {
+                request.getRequestDispatcher("/Song/songListAddPrompt.do").forward(request, response);
+            }
+        } else if ("/Song/addSongsToListPrompt.do".equals(request.getServletPath())) {
+            String listId = request.getParameter("listId");
+            request.setAttribute("listId", listId);
+            request.getRequestDispatcher("/WEB-INF/views/biz/addSongToList.jsp").forward(request, response);
         }
     }
 }
