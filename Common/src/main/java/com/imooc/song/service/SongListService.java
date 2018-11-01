@@ -77,4 +77,30 @@ public class SongListService {
             session.close();
         }
     }
+
+    public void updateSongList(SongList songList) {
+        SqlSession session = MyBatisUtils.getSqlSession();
+        try {
+            SongListMapper mapper = session.getMapper(SongListMapper.class);
+            mapper.updateSongList(songList);
+            session.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    public void deleteSongList(Long id) {
+        SqlSession session = MyBatisUtils.getSqlSession();
+        try {
+            SongListMapper mapper = session.getMapper(SongListMapper.class);
+            mapper.deleteSongList(id);
+            session.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
 }

@@ -13,6 +13,13 @@
     <link rel="stylesheet" href="../../../lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <script src="../../../lib/2.2.4/jquery-2.2.4.min.js"></script>
     <script src="../../../lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script>
+        $().ready(function () {
+            let pageNo = "<%=request.getAttribute("page")%>";
+            console.log(pageNo);
+            $("li[id="+pageNo+"]").addClass("active");
+        });
+    </script>
     <title>曲库</title>
 </head>
 <body>
@@ -20,7 +27,7 @@
     <div class="row">
         <div class="page-header">
             <h1>歌曲库
-                <a href="${pageContext.request.contextPath}/Song/list.do" class="btn btn-primary btn-lg pull-right" role="button">返回我的歌单</a>
+                <a href="${pageContext.request.contextPath}/SongList/list.do" class="btn btn-primary btn-lg pull-right" role="button">返回我的歌单</a>
             </h1>
         </div>
     </div>
@@ -55,13 +62,63 @@
                     <td><fmt:formatDate type="date" value="${song.issueDate}" pattern="yyyy-MM-dd"/></td>
                     <td>
                         <div class="btn-group" role="group" aria-label="...">
-                            <a href="${pageContext.request.contextPath}/Song/editSong.do" class="btn btn-primary btn-sm" role="button">编辑</a>
-                            <a href="${pageContext.request.contextPath}/Song/deleteSong.do" class="btn btn-primary btn-sm" role="button">删除</a>
+                            <a href="${pageContext.request.contextPath}/Song/editSongPrompt.do?songId=${song.id}" class="btn btn-primary btn-sm" role="button">编辑</a>
+                            <a href="${pageContext.request.contextPath}/Song/deleteSong.do?songId=${song.id}" class="btn btn-primary btn-sm" role="button">删除</a>
                         </div>
                     </td>
                 </tr>
             </c:forEach>
         </table>
+    </div>
+    <div class="row">
+        <nav aria-label="Page navigation" class="text-center">
+            <ul class="pagination pagination-lg">
+                <li>
+                    <c:choose>
+                        <c:when test="${page==1}">
+                            <li class="disabled">
+                                <span>
+                                <span aria-hidden="true">&laquo;</span>
+                                </span>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/Song/allSongs.do?page=${page-1}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+                </li>
+                <%
+                    Integer totalPage = (Integer) request.getAttribute("totalPage");
+                    for(int i=1; i<=totalPage; i++){
+                %>
+                <li id="<%=i%>"><a href="${pageContext.request.contextPath}/Song/allSongs.do?page=<%=i%>"><%=i%></a></li>
+                <%
+                    }
+                %>
+                <li>
+                    <c:choose>
+                    <c:when test="${page==totalPage}">
+                        <li class="disabled">
+                                <span>
+                                <span aria-hidden="true">&raquo;</span>
+                                </span>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li>
+                            <a href="${pageContext.request.contextPath}/Song/allSongs.do?page=${page+1}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </c:otherwise>
+                    </c:choose>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 </body>

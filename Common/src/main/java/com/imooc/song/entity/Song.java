@@ -15,6 +15,16 @@ public class Song {
 
     }
 
+    public Song(Long id, String name, String singer, String category, String writer, String language, Date issueDate) {
+        this.id = id;
+        this.name = name;
+        this.singer = singer;
+        this.category = category;
+        this.writer = writer;
+        this.language = language;
+        this.issueDate = issueDate;
+    }
+
     public Song(String name, String singer, String category, String writer, String language, Date issueDate) {
         this.name = name;
         this.singer = singer;

@@ -1,10 +1,7 @@
 package com.imooc.song.mapper;
 
 import com.imooc.song.entity.SongList;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -23,4 +20,10 @@ public interface SongListMapper {
 
     @Update("UPDATE songlist SET songname = #{songNames} WHERE id = #{id}")
     void updateSongNameInList(@Param("songNames") String songNames, @Param("id") Long id);
+
+    @Update("UPDATE songlist SET name = #{songList.name},description=#{songList.description} WHERE id = #{songList.id}")
+    void updateSongList(@Param("songList") SongList songList);
+
+    @Delete("DELETE FROM songlist WHERE id = #{id}")
+    void deleteSongList(@Param("id") Long id);
 }

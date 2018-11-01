@@ -10,6 +10,13 @@ public class SongList {
     public SongList() {
     }
 
+    public SongList(Long id, String name, String creator, String description) {
+        this.id = id;
+        this.name = name;
+        this.creator = creator;
+        this.description = description;
+    }
+
     public SongList(String name, String creator, String description) {
         this.name = name;
         this.creator = creator;

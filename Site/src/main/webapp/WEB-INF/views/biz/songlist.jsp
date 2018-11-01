@@ -46,7 +46,7 @@
             <c:forEach items="${songMap}" var="map" varStatus="status">
             <li id="tag_${status.index}" role="presentation"><a href="javascript:void(0)">${map.key.name}</a></li>
             </c:forEach>
-            <li role="presentation"><a href="${pageContext.request.contextPath}/Song/songListAddPrompt.do">+新增歌单+</a></li>
+            <li role="presentation"><a href="${pageContext.request.contextPath}/SongList/songListAddPrompt.do">+新增歌单+</a></li>
         </ul>
     </div>
     <c:forEach items="${songMap}" var="map" varStatus="status">
@@ -54,7 +54,10 @@
         <div class="panel panel-default">
             <div class="panel-body">
                     ${map.key.description}
-                        <a href="${pageContext.request.contextPath}/Song/editSongListPrompt.do?listId=${map.key.id}" class="btn btn-primary btn-sm pull-right" role="button">编辑此歌单</a>
+                        <div class="btn-group pull-right" role="group" aria-label="...">
+                            <a href="${pageContext.request.contextPath}/SongList/editSongListPrompt.do?listId=${map.key.id}" class="btn btn-primary btn-sm" role="button">编辑此歌单</a>
+                            <a href="${pageContext.request.contextPath}/SongList/deleteSongList.do?listId=${map.key.id}" class="btn btn-primary btn-sm" role="button">删除</a>
+                        </div>
             </div>
         </div>
         <table class="table table-striped table-bordered table-hover">
@@ -77,15 +80,65 @@
                 <td>${song.writer}</td>
                 <td>${song.language}</td>
                 <td><fmt:formatDate type="date" value="${song.issueDate}" pattern="yyyy-MM-dd"/></td>
-                <td><a href="${pageContext.request.contextPath}/Song/removeSongFromList.do?songId=${song.id}" class="btn btn-primary btn-sm" role="button">移出歌单</a></td>
+                <td><a href="${pageContext.request.contextPath}/SongList/removeSongFromList.do?songName=${song.name}&&listId=${map.key.id}" class="btn btn-primary btn-sm" role="button">移出歌单</a></td>
             </tr>
             </c:forEach>
             <tr>
-                <td colspan="8"><a href="${pageContext.request.contextPath}/Song/addSongsToListPrompt.do?listId=${map.key.id}" class="btn btn-primary btn-lg center-block" role="button">添加歌曲</a></td>
+                <td colspan="8"><a href="${pageContext.request.contextPath}/SongList/addSongsToListPrompt.do?listId=${map.key.id}" class="btn btn-primary btn-lg center-block" role="button">添加歌曲</a></td>
             </tr>
         </table>
     </div>
     </c:forEach>
+    <div class="row">
+        <nav aria-label="Page navigation" class="text-center">
+            <ul class="pagination pagination-lg">
+                <li>
+                    <c:choose>
+                    <c:when test="${page==1}">
+                <li class="disabled">
+                                <span>
+                                <span aria-hidden="true">&laquo;</span>
+                                </span>
+                </li>
+                </c:when>
+                <c:otherwise>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/Song/allSongs.do?page=${page-1}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                </c:otherwise>
+                </c:choose>
+                </li>
+                <%
+                    Integer totalPage = (Integer) request.getAttribute("totalPage");
+                    for(int i=1; i<=totalPage; i++){
+                %>
+                <li id="<%=i%>"><a href="${pageContext.request.contextPath}/Song/allSongs.do?page=<%=i%>"><%=i%></a></li>
+                <%
+                    }
+                %>
+                <li>
+                    <c:choose>
+                    <c:when test="${page==totalPage}">
+                <li class="disabled">
+                                <span>
+                                <span aria-hidden="true">&raquo;</span>
+                                </span>
+                </li>
+                </c:when>
+                <c:otherwise>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/Song/allSongs.do?page=${page+1}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </c:otherwise>
+                </c:choose>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 
 </body>

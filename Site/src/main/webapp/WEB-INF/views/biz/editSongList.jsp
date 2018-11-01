@@ -19,25 +19,30 @@
 <div class="container">
     <div class="row">
         <div class="page-header">
-            <h1>添加歌曲<small></small></h1>
+            <h1>编辑歌单</h1>
         </div>
     </div>
     <div class="row">
-        <form role="form" action="${pageContext.request.contextPath}/SongList/addSongsToList.do" method="post">
-            <input type="hidden" name="listId" value="${listId}">
+        <form class="form-horizontal" action="${pageContext.request.contextPath}/SongList/editSongList.do" method="post">
+            <input type="hidden" value="${songList.id}" name="id">
             <div class="form-group">
-                <c:forEach var="song" items="${allSongs}">
-                <label class="checkbox-inline input-lg">
-                    <input type="checkbox" name="selectSongs"  value="${song.name}">${song.name}
-                </label>
-                </c:forEach>
+                <label for="name" class="col-lg-2 control-label">歌单名</label>
+                <div class="col-lg-6">
+                    <input type="text" class="form-control" id="name" name="name" value="${songList.name}" placeholder="请输入歌单名">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-lg-2 control-label">描述</label>
+                <div class="col-lg-6">
+                    <input type="text" class="form-control" id="description" value="${songList.description}" name="description" placeholder="请输入描述">
+                </div>
             </div>
             <div class="form-group">
                 <div class="col-lg-offset-4 col-lg-1">
                     <button type="submit" class="btn btn-primary">提交</button>
                 </div>
                 <div class="col-lg-1">
-                    <button type="reset" class="btn btn-warning">取消</button>
+                    <button type="reset" class="btn btn-primary">取消</button>
                 </div>
             </div>
         </form>

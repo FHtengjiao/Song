@@ -19,11 +19,11 @@
 <div class="container">
     <div class="row">
         <div class="page-header">
-            <h1>新增歌曲</h1>
+            <h1>新增歌单</h1>
         </div>
     </div>
     <div class="row">
-        <form class="form-horizontal" action="${pageContext.request.contextPath}/Song/songListAdd.do" method="post">
+        <form class="form-horizontal" action="${pageContext.request.contextPath}/SongList/songListAdd.do" method="post">
             <div class="form-group">
                 <label for="name" class="col-lg-2 control-label">歌单名</label>
                 <div class="col-lg-6">

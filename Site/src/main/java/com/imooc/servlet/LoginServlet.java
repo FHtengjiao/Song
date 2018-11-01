@@ -17,7 +17,7 @@ public class LoginServlet extends HttpServlet {
 
             if (null != username && !"".equals(username) && username.equals(password)) {
                 request.getSession().setAttribute("username", username);
-                request.getRequestDispatcher("/Song/list.do").forward(request, response);
+                request.getRequestDispatcher("/SongList/list.do").forward(request, response);
             } else {
                 request.getRequestDispatcher("/loginPrompt.do").forward(request, response);
             }
