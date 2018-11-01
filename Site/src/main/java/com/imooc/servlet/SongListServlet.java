@@ -50,7 +50,6 @@ public class SongListServlet extends HttpServlet {
                 } else {
                     map.put(songList, null);
                 }
-
             }
             request.setAttribute("songMap", map);
             request.getRequestDispatcher("/WEB-INF/views/biz/songlist.jsp").forward(request, response);

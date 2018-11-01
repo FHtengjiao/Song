@@ -18,15 +18,6 @@ public interface SongMapper {
             + "</script>")
     List<Song> getSongsByNames(@Param("names") List<String> names);
 
-    @Select("<script> "
-            + "SELECT * FROM song WHERE name IN "
-            + "<foreach item='item' index='index' collection='names' open='(' separator=',' close=')'>"
-            + "#{item} LIMIT #{skip}, #{size}"
-            + "</foreach>"
-            + "</script>")
-    List<Song> getSongsByNamesAndSize(@Param("names") List<String> names, @Param("skip") Integer skip, @Param("size") Integer size);
-
-
     @Insert("INSERT song(name,singer,category,writer,language,issuedate) " +
             "VALUES(#{song.name}, #{song.singer}, #{song.category}, #{song.writer}, #{song.language}, #{song.issueDate})")
     void addSong(@Param("song") Song song);

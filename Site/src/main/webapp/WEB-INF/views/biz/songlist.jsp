@@ -89,56 +89,6 @@
         </table>
     </div>
     </c:forEach>
-    <div class="row">
-        <nav aria-label="Page navigation" class="text-center">
-            <ul class="pagination pagination-lg">
-                <li>
-                    <c:choose>
-                    <c:when test="${page==1}">
-                <li class="disabled">
-                                <span>
-                                <span aria-hidden="true">&laquo;</span>
-                                </span>
-                </li>
-                </c:when>
-                <c:otherwise>
-                    <li>
-                        <a href="${pageContext.request.contextPath}/Song/allSongs.do?page=${page-1}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                </c:otherwise>
-                </c:choose>
-                </li>
-                <%
-                    Integer totalPage = (Integer) request.getAttribute("totalPage");
-                    for(int i=1; i<=totalPage; i++){
-                %>
-                <li id="<%=i%>"><a href="${pageContext.request.contextPath}/Song/allSongs.do?page=<%=i%>"><%=i%></a></li>
-                <%
-                    }
-                %>
-                <li>
-                    <c:choose>
-                    <c:when test="${page==totalPage}">
-                <li class="disabled">
-                                <span>
-                                <span aria-hidden="true">&raquo;</span>
-                                </span>
-                </li>
-                </c:when>
-                <c:otherwise>
-                    <li>
-                        <a href="${pageContext.request.contextPath}/Song/allSongs.do?page=${page+1}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </c:otherwise>
-                </c:choose>
-                </li>
-            </ul>
-        </nav>
-    </div>
 </div>
 
 </body>

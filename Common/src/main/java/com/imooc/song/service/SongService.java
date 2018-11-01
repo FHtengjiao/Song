@@ -118,18 +118,4 @@ public class SongService {
         }
         return count;
     }
-
-    public List<Song> getSongsByNamesAndSize(List<String> names, Integer skip, Integer size) {
-        SqlSession session = MyBatisUtils.getSqlSession();
-        List<Song> songs = new ArrayList<>();
-        try {
-            SongMapper mapper = session.getMapper(SongMapper.class);
-            songs = mapper.getSongsByNamesAndSize(names, skip, size);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-        return songs;
-    }
 }
